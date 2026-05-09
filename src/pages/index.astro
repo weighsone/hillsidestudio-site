@@ -1,10 +1,29 @@
 ---
+import { Image, getImage } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
+import heroImg         from '../assets/images/f836922c-5043-4103-873f-7205ad07ffcb.jpg';
+import aboutImg        from '../assets/images/e812855b-2d62-4146-906c-c40510c767c9.jpg';
+import locationImg     from '../assets/images/70512c44-99bb-49c0-bf76-12115e31d55a.jpg';
+import ctaImg          from '../assets/images/def82610-c9b3-42d0-a7a3-1bdf47ce475b.jpg';
+import rightOfWayImg   from '../assets/images/right-of-way.jpg';
+import parkEntranceImg from '../assets/images/park-entrance.png';
+import doorImg         from '../assets/images/door.png';
+
+const photoGlob = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/images/*.{jpg,jpeg,png}',
+  { eager: true }
+);
+
+const [rowFull, parkFull, doorFull] = await Promise.all([
+  getImage({ src: rightOfWayImg,   format: 'webp', quality: 90 }),
+  getImage({ src: parkEntranceImg, format: 'webp', quality: 90 }),
+  getImage({ src: doorImg,         format: 'webp', quality: 90 }),
+]);
+
 const AIRBNB_URL = 'https://www.airbnb.co.nz/rooms/958834586847228237';
-const CDN = '/images';
 
 const photos = [
   { id: 'f836922c-5043-4103-873f-7205ad07ffcb', alt: 'Hillside Studio exterior and surroundings' },
@@ -15,7 +34,10 @@ const photos = [
   { id: '70512c44-99bb-49c0-bf76-12115e31d55a', alt: 'Valley view from the studio' },
   { id: '2c623cd8-b492-4ca5-8b4b-94ba7e7800d0', alt: 'Workspace and desk area' },
   { id: '097b4419-eec7-4640-be29-d265e4046a46', alt: 'Studio space' },
-];
+].map(p => ({
+  ...p,
+  img: photoGlob[`../assets/images/${p.id}.jpg`]?.default,
+}));
 
 const amenities = [
   { icon: '🏔️', label: 'Valley view' },
@@ -72,11 +94,14 @@ const reviews = [
 
   <!-- Hero -->
   <section class="relative h-screen min-h-[600px] flex items-end">
-    <img
-      src={`${CDN}/f836922c-5043-4103-873f-7205ad07ffcb.jpg`}
+    <Image
+      src={heroImg}
       alt="Hillside Studio — Wellington"
       class="absolute inset-0 w-full h-full object-cover"
-      fetchpriority="high"
+      widths={[800, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      quality={85}
     />
     <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(20,35,25,0.80) 0%, rgba(20,35,25,0.20) 60%, transparent 100%);"></div>
     <div class="relative z-10 px-6 pb-16 md:px-16 md:pb-24 max-w-3xl">
@@ -144,10 +169,12 @@ const reviews = [
         </a>
       </div>
       <div class="relative">
-        <img
-          src={`${CDN}/e812855b-2d62-4146-906c-c40510c767c9.jpg`}
+        <Image
+          src={aboutImg}
           alt="Studio interior"
           class="rounded-2xl w-full object-cover shadow-lg aspect-[4/5]"
+          width={900}
+          quality={85}
           loading="lazy"
         />
         <div class="absolute -bottom-4 -left-4 bg-[#1e2e26] text-white rounded-xl px-5 py-3 text-sm">
@@ -168,10 +195,12 @@ const reviews = [
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
         {photos.slice(0, 5).map((photo, i) => (
           <div class={`overflow-hidden rounded-xl ${i === 0 ? 'col-span-2 md:col-span-1 md:row-span-2' : ''}`}>
-            <img
-              src={`${CDN}/${photo.id}.jpg`}
+            <Image
+              src={photo.img}
               alt={photo.alt}
               class="w-full h-full object-cover aspect-square hover:scale-105 transition-transform duration-500"
+              width={800}
+              quality={80}
               loading="lazy"
             />
           </div>
@@ -228,10 +257,12 @@ const reviews = [
         </ul>
       </div>
       <div>
-        <img
-          src={`${CDN}/70512c44-99bb-49c0-bf76-12115e31d55a.jpg`}
+        <Image
+          src={locationImg}
           alt="Valley view from Hillside Studio"
           class="rounded-2xl w-full object-cover shadow-xl aspect-[4/3]"
+          width={900}
+          quality={85}
           loading="lazy"
         />
       </div>
@@ -274,10 +305,14 @@ const reviews = [
 
   <!-- CTA -->
   <section class="relative py-28 px-6 text-center overflow-hidden">
-    <img
-      src={`${CDN}/def82610-c9b3-42d0-a7a3-1bdf47ce475b.jpg`}
+    <Image
+      src={ctaImg}
       alt="Book Hillside Studio"
       class="absolute inset-0 w-full h-full object-cover"
+      widths={[800, 1280, 1920]}
+      sizes="100vw"
+      quality={80}
+      loading="lazy"
     />
     <div class="absolute inset-0 bg-[#1e2e26]/75"></div>
     <div class="relative z-10 max-w-xl mx-auto">
@@ -310,19 +345,19 @@ const reviews = [
         Step-by-step photos to help you find the studio and get in. The lockbox code is included in your check-in instructions.
       </p>
       <div class="checkin-gallery">
-        <a href="/images/right-of-way.jpg" data-fancybox="checkin" data-caption="1. Right of way path"
+        <a href={rowFull.src} data-fancybox="checkin" data-caption="1. Right of way path"
            style="--width: 1860; --height: 2475;" class="rounded-xl">
-          <img src="/images/right-of-way.jpg" alt="Right of way path" loading="lazy" />
+          <Image src={rightOfWayImg} alt="Right of way path" width={900} quality={85} loading="lazy" />
           <span class="checkin-step">1</span>
         </a>
-        <a href="/images/park-entrance.png" data-fancybox="checkin" data-caption="2. Park entrance"
+        <a href={parkFull.src} data-fancybox="checkin" data-caption="2. Park entrance"
            style="--width: 1024; --height: 1365;" class="rounded-xl">
-          <img src="/images/park-entrance.png" alt="Park entrance" loading="lazy" />
+          <Image src={parkEntranceImg} alt="Park entrance" width={800} quality={85} loading="lazy" />
           <span class="checkin-step">2</span>
         </a>
-        <a href="/images/door.png" data-fancybox="checkin" data-caption="3. Studio door"
+        <a href={doorFull.src} data-fancybox="checkin" data-caption="3. Studio door"
            style="--width: 1024; --height: 768;" class="rounded-xl">
-          <img src="/images/door.png" alt="Studio door" loading="lazy" />
+          <Image src={doorImg} alt="Studio door" width={900} quality={85} loading="lazy" />
           <span class="checkin-step">3</span>
         </a>
       </div>
