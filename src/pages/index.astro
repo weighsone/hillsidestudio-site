@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
+import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
 const AIRBNB_URL = 'https://www.airbnb.co.nz/rooms/958834586847228237';
 const CDN = '/images';
@@ -165,7 +166,7 @@ const reviews = [
         See the space
       </h2>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-        {photos.slice(0, 6).map((photo, i) => (
+        {photos.slice(0, 5).map((photo, i) => (
           <div class={`overflow-hidden rounded-xl ${i === 0 ? 'col-span-2 md:col-span-1 md:row-span-2' : ''}`}>
             <img
               src={`${CDN}/${photo.id}.jpg`}
@@ -308,101 +309,75 @@ const reviews = [
       <p class="text-center text-[#5a5a5a] text-sm mb-10 max-w-lg mx-auto">
         Step-by-step photos to help you find the studio and get in. The lockbox code is included in your check-in instructions.
       </p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <button class="rounded-xl overflow-hidden bg-white shadow-sm text-left group cursor-zoom-in" data-lb="0">
-          <img src="/images/right-of-way.jpg" alt="Right of way path" class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-          <p class="text-xs font-medium text-[#1e2e26] px-4 py-3">1. Right of way path</p>
-        </button>
-        <button class="rounded-xl overflow-hidden bg-white shadow-sm text-left group cursor-zoom-in" data-lb="1">
-          <img src="/images/park-entrance.png" alt="Park entrance" class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-          <p class="text-xs font-medium text-[#1e2e26] px-4 py-3">2. Park entrance</p>
-        </button>
-        <button class="rounded-xl overflow-hidden bg-white shadow-sm text-left group cursor-zoom-in" data-lb="2">
-          <img src="/images/door.png" alt="Studio door" class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-          <p class="text-xs font-medium text-[#1e2e26] px-4 py-3">3. Studio door</p>
-        </button>
+      <div class="checkin-gallery">
+        <a href="/images/right-of-way.jpg" data-fancybox="checkin" data-caption="1. Right of way path"
+           style="--width: 1860; --height: 2475;" class="rounded-xl">
+          <img src="/images/right-of-way.jpg" alt="Right of way path" loading="lazy" />
+          <span class="checkin-step">1</span>
+        </a>
+        <a href="/images/park-entrance.png" data-fancybox="checkin" data-caption="2. Park entrance"
+           style="--width: 1024; --height: 1365;" class="rounded-xl">
+          <img src="/images/park-entrance.png" alt="Park entrance" loading="lazy" />
+          <span class="checkin-step">2</span>
+        </a>
+        <a href="/images/door.png" data-fancybox="checkin" data-caption="3. Studio door"
+           style="--width: 1024; --height: 768;" class="rounded-xl">
+          <img src="/images/door.png" alt="Studio door" loading="lazy" />
+          <span class="checkin-step">3</span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- Lightbox -->
-  <div id="lb-overlay" style="display:none" class="fixed inset-0 z-50 bg-black/92 flex items-center justify-center" role="dialog" aria-modal="true">
-    <button id="lb-close" aria-label="Close" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-white/50 hover:text-white transition-colors">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <span id="lb-counter" class="absolute top-5 left-1/2 -translate-x-1/2 text-white/40 text-sm tabular-nums"></span>
-    <div class="w-full max-w-2xl px-14 md:px-20">
-      <img id="lb-img" src="" alt="" class="w-full max-h-[78vh] object-contain rounded-lg" />
-      <p id="lb-caption" class="text-white/60 text-sm text-center mt-4"></p>
-    </div>
-    <button id="lb-prev" aria-label="Previous" class="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <button id="lb-next" aria-label="Next" class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-  </div>
+  <style>
+    .checkin-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .checkin-gallery a {
+      flex-grow: calc(var(--width) * (100000 / var(--height)));
+      flex-basis: calc(180px * (var(--width) / var(--height)));
+      overflow: hidden;
+      cursor: zoom-in;
+      position: relative;
+    }
+    .checkin-gallery a img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .checkin-gallery a:hover img {
+      transform: scale(1.04);
+    }
+    .checkin-gallery::after {
+      content: " ";
+      flex-grow: 1000000000;
+    }
+    .checkin-step {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(30, 46, 38, 0.75);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 
-  <script is:inline>
-    (function () {
-      var images = [
-        { src: '/images/right-of-way.jpg',  caption: '1. Right of way path' },
-        { src: '/images/park-entrance.png', caption: '2. Park entrance' },
-        { src: '/images/door.png',          caption: '3. Studio door' },
-      ];
-      var overlay  = document.getElementById('lb-overlay');
-      var lbImg    = document.getElementById('lb-img');
-      var lbCap    = document.getElementById('lb-caption');
-      var lbCount  = document.getElementById('lb-counter');
-      var prevBtn  = document.getElementById('lb-prev');
-      var nextBtn  = document.getElementById('lb-next');
-      var current  = 0;
-      var touchStartX = 0;
-
-      function show(index) {
-        current = index;
-        var item = images[current];
-        lbImg.src = item.src;
-        lbImg.alt = item.caption;
-        lbCap.textContent = item.caption;
-        lbCount.textContent = (current + 1) + ' / ' + images.length;
-        prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
-        nextBtn.style.visibility = current === images.length - 1 ? 'hidden' : 'visible';
-        overlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      }
-
-      function close() {
-        overlay.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-
-      document.querySelectorAll('[data-lb]').forEach(function (btn) {
-        btn.addEventListener('click', function () { show(parseInt(btn.dataset.lb)); });
-      });
-
-      document.getElementById('lb-close').addEventListener('click', close);
-      prevBtn.addEventListener('click', function () { show(current - 1); });
-      nextBtn.addEventListener('click', function () { show(current + 1); });
-
-      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
-
-      document.addEventListener('keydown', function (e) {
-        if (overlay.style.display !== 'flex') return;
-        if (e.key === 'Escape') close();
-        if (e.key === 'ArrowLeft'  && current > 0) show(current - 1);
-        if (e.key === 'ArrowRight' && current < images.length - 1) show(current + 1);
-      });
-
-      overlay.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
-      overlay.addEventListener('touchend', function (e) {
-        var diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) {
-          if (diff > 0 && current < images.length - 1) show(current + 1);
-          if (diff < 0 && current > 0) show(current - 1);
-        }
-      });
-    })();
+  <script>
+    import { Fancybox } from '@fancyapps/ui';
+    Fancybox.bind("[data-fancybox='checkin']", {
+      Carousel: { transition: 'slide' },
+    });
   </script>
 
   <!-- Footer -->
