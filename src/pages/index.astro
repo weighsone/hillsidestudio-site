@@ -306,11 +306,9 @@ const reviews = [
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {[
-          { src: '/images/parking-entrance.png', label: '1. Parking entrance' },
+          { src: '/images/right-of-way.jpg',    label: '1. Right of way path' },
           { src: '/images/park-entrance.png',   label: '2. Park entrance' },
-          { src: '/images/right-of-way.jpg',    label: '3. Right of way path' },
-          { src: '/images/door.png',            label: '4. Studio door' },
-          { src: '/images/lockbox.png',         label: '5. Keypad lockbox' },
+          { src: '/images/door.png',            label: '3. Studio door' },
         ].map((item) => (
           <div class="rounded-xl overflow-hidden bg-white shadow-sm">
             <img src={item.src} alt={item.label} class="w-full aspect-[4/3] object-cover" loading="lazy" />
