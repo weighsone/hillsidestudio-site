@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
 
 const AIRBNB_URL = 'https://www.airbnb.co.nz/rooms/958834586847228237';
-const CDN = 'https://a0.muscache.com/im/pictures/miso/Hosting-958834586847228237/original';
+const CDN = '/images';
 
 const photos = [
   { id: 'f836922c-5043-4103-873f-7205ad07ffcb', alt: 'Hillside Studio exterior and surroundings' },
@@ -68,7 +68,7 @@ const reviews = [
   <!-- Hero -->
   <section class="relative h-screen min-h-[600px] flex items-end">
     <img
-      src={`${CDN}/f836922c-5043-4103-873f-7205ad07ffcb.jpeg?im_w=1920`}
+      src={`${CDN}/f836922c-5043-4103-873f-7205ad07ffcb.jpg`}
       alt="Hillside Studio — Wellington"
       class="absolute inset-0 w-full h-full object-cover"
       fetchpriority="high"
@@ -140,7 +140,7 @@ const reviews = [
       </div>
       <div class="relative">
         <img
-          src={`${CDN}/e812855b-2d62-4146-906c-c40510c767c9.jpeg?im_w=800`}
+          src={`${CDN}/e812855b-2d62-4146-906c-c40510c767c9.jpg`}
           alt="Studio interior"
           class="rounded-2xl w-full object-cover shadow-lg aspect-[4/5]"
           loading="lazy"
@@ -164,7 +164,7 @@ const reviews = [
         {photos.slice(0, 6).map((photo, i) => (
           <div class={`overflow-hidden rounded-xl ${i === 0 ? 'col-span-2 md:col-span-1 md:row-span-2' : ''}`}>
             <img
-              src={`${CDN}/${photo.id}.jpeg?im_w=800`}
+              src={`${CDN}/${photo.id}.jpg`}
               alt={photo.alt}
               class="w-full h-full object-cover aspect-square hover:scale-105 transition-transform duration-500"
               loading="lazy"
@@ -224,7 +224,7 @@ const reviews = [
       </div>
       <div>
         <img
-          src={`${CDN}/70512c44-99bb-49c0-bf76-12115e31d55a.jpeg?im_w=800`}
+          src={`${CDN}/70512c44-99bb-49c0-bf76-12115e31d55a.jpg`}
           alt="Valley view from Hillside Studio"
           class="rounded-2xl w-full object-cover shadow-xl aspect-[4/3]"
           loading="lazy"
@@ -270,7 +270,7 @@ const reviews = [
   <!-- CTA -->
   <section class="relative py-28 px-6 text-center overflow-hidden">
     <img
-      src={`${CDN}/def82610-c9b3-42d0-a7a3-1bdf47ce475b.jpeg?im_w=1440`}
+      src={`${CDN}/def82610-c9b3-42d0-a7a3-1bdf47ce475b.jpg`}
       alt="Book Hillside Studio"
       class="absolute inset-0 w-full h-full object-cover"
     />
